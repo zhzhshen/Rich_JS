@@ -1,0 +1,6 @@
+[submodule "Java"]
+	path = Java
+	url = https://github.com/zhzhshen/Rich_Java.git
+[submodule "Ruby"]
+	path = Ruby
+	url = https://github.com/zhzhshen/Rich_Ruby.git
