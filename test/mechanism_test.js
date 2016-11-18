@@ -36,5 +36,24 @@ describe('Player', () => {
 
         player.status.should.equal('WAIT_FOR_COMMAND');
       });
+    });
+
+    describe('#respond', () => {
+      beforeEach(() => {
+          player = new Player();
+          command = new Command();
+          player.status.should.equal('WAIT_FOR_COMMAND');
+          command.execute = () => 'WAIT_FOR_RESPONSE';
+          player.execute(command);
+          player.status.should.equal('WAIT_FOR_RESPONSE');
+      });
+
+      it('then should turn end', () => {
+        command.respond = () => 'TURN_END';
+
+        player.respond('');
+
+        player.status.should.equal('TURN_END');
+      });
     })
 });

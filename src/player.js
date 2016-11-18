@@ -14,6 +14,10 @@ class Player {
   execute(command) {
     this.status = command.execute(this);
   }
+
+  respond(response) {
+    this.status = command.respond(response)
+  }
 }
 
 module.exports = Player;

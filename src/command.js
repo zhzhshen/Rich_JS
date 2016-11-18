@@ -5,6 +5,10 @@ class Command {
   execute(player) {
 
   }
+
+  respond(response) {
+    
+  }
 }
 
 module.exports = Command;
