@@ -1,6 +1,0 @@
-[submodule "Java"]
-	path = Rich_Java
-	url = https://github.com/zhzhshen/Rich_Java.git
-[submodule "Ruby"]
-	path = Rich_Ruby
-	url = https://github.com/zhzhshen/Rich_Ruby.git
