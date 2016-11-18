@@ -57,9 +57,10 @@ class Estate {
     if (this.owner == null) {
       return new BuyEstateCommand().execute(player);
     } else if (this.owner != player) {
-      if (player.money >= this.price) {
-        player.money -= this.price;
-        this.owner.money += this.price;
+      let charge = this.getCharge();
+      if (player.money >= charge) {
+        player.money -= charge;
+        this.owner.money += charge;
       } else {
         player.gameOver();
         this.owner.money += player.money;
@@ -68,6 +69,10 @@ class Estate {
     } else {
       return new BuildEstateCommand().execute(player);
     }
+  }
+
+  getCharge() {
+    return this.price * Math.pow(2, this.level - 1);
   }
 }
 

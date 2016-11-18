@@ -29,14 +29,26 @@ describe('RollCommand', ()=>{
       player.status.should.equal('WAIT_FOR_RESPONSE');
     });
 
-    it('should move player to others estate and turn end pay toll', () => {
+    it('should move player to others level 0 estate and turn end pay half estate price', () => {
       other = new Player(map, 1000)
       estate.owner = other;
 
       player.execute(command);
 
-      player.money.should.equal(800);
-      other.money.should.equal(1200);
+      player.money.should.equal(900);
+      other.money.should.equal(1100);
+      player.status.should.equal('TURN_END');
+    });
+
+    it('should move player to others level 3 estate and turn end pay four times estate price', () => {
+      other = new Player(map, 1000)
+      estate.level = 3;
+      estate.owner = other;
+
+      player.execute(command);
+
+      player.money.should.equal(200);
+      other.money.should.equal(1800);
       player.status.should.equal('TURN_END');
     });
 
