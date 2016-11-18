@@ -39,18 +39,24 @@ class Player {
 
   buy() {
     if (this.money >= this.currentPlace.price) {
-      this.money = this.money - this.currentPlace.price;
+      this.money -= this.currentPlace.price;
       this.currentPlace.sellTo(this);
-    } 
+    }
+  }
+
+  build() {
+    if (this.money >= this.currentPlace.price && this.currentPlace.build()) {
+      this.money -= this.currentPlace.price;
+    }
   }
 
   execute(command) {
-    this.command = command
-    this.status = this.command.execute(this);
+    this.command = command;
+    this.status = command.execute(this);
   }
 
   respond(response) {
-    this.status = this.command.respond(response)
+    this.status = this.command.respond(response);
   }
 }
 

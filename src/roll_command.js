@@ -13,14 +13,7 @@ class RollCommand {
 
   execute(player) {
     player.currentPlace = player.map.move(player, this.step);
-    return 'WAIT_FOR_RESPONSE';
-  }
-
-  respond(response) {
-    if (response == 'y') {
-      player.buy();
-    }
-    return 'TURN_END';
+    return player.currentPlace.visitBy(player);
   }
 }
 
