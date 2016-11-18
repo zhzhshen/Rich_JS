@@ -7,7 +7,7 @@ class BuyEstateCommand {
     return 'WAIT_FOR_RESPONSE';
   }
 
-  respond(response) {
+  respond(player, response) {
     if (response == 'y') {
       player.buy();
     }

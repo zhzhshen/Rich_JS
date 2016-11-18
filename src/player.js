@@ -28,6 +28,10 @@ class Player {
     this._point = point;
   }
 
+  gainPoint(point) {
+    this.point += point;
+  }
+
   get map() {
     return this._map;
   }
@@ -42,6 +46,10 @@ class Player {
 
   set money(money) {
     this._money = money;
+  }
+
+  gainMoney(money) {
+    this.money += money;
   }
 
   get status() {
@@ -127,7 +135,7 @@ class Player {
   }
 
   respond(response) {
-    this.status = this.command.respond(response);
+    this.status = this.command.respond(this, response);
   }
 }
 

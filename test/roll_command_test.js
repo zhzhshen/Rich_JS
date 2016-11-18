@@ -10,6 +10,7 @@ let StartingPoint = require(path.join(__dirname, '../src', 'starting_point'));
 let Hospital = require(path.join(__dirname, '../src', 'hospital'));
 let MagicHouse = require(path.join(__dirname, '../src', 'magic_house'));
 let ToolHouse = require(path.join(__dirname, '../src', 'tool_house'));
+let GiftHouse = require(path.join(__dirname, '../src', 'gift_house'));
 let Dice = require(path.join(__dirname, '../src', 'dice'));
 
 describe('RollCommand', ()=>{
@@ -226,6 +227,60 @@ describe('RollCommand', ()=>{
       player.point.should.equal(200);
       player.status.should.equal('TURN_END');
     });
+  });
+
+  describe('#execute', ()=>{
+    beforeEach(() => {
+        dice = new Dice();
+        dice.roll = () => 1;
+        map = new GameMap();
+        player = new Player(map, 1000);
+
+        giftHouse = new GiftHouse(1);
+        map.move = () => giftHouse;
+        command = new RollCommand(dice);
+        player.execute(command);
+    });
+
+    it('should move player to gift house and wait for response', () => {
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player quit when respond anything other than 1,2,3', () => {
+      player.respond('n');
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(200);
+      player.money.should.equal(1000);
+    });
+
+    it('should player gain money when respond 1', () => {
+      player.respond('1');
+
+      player.point.should.equal(200);
+      player.money.should.equal(3000);
+    });
+
+    it('should player gain point when respond 2', () => {
+      player.respond('2');
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(400);
+      player.money.should.equal(1000);
+    });
+
+    it('should player have evisu when respond 3', () => {
+      player.respond('3');
+
+      player.hasEvisu().should.equal(true);
+      player.point.should.equal(200);
+      player.money.should.equal(1000);
+    });
+
+    // afterEach(()=> {
+    //   player.status.should.equal('TURN_END');
+    // });
+
   });
 
   describe('#respond to buy estate', ()=>{

@@ -11,7 +11,7 @@ class BuildToolCommand {
     return 'WAIT_FOR_RESPONSE';
   }
 
-  respond(response) {
+  respond(player, response) {
     if (response == '1') {
       let block = new Block();
       player.buyItem(block);
