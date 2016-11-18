@@ -6,6 +6,7 @@ let Player = require(path.join(__dirname, '../src', 'player'));
 let RollCommand = require(path.join(__dirname, '../src', 'roll_command'));
 let GameMap = require(path.join(__dirname, '../src', 'game_map'));
 let Estate = require(path.join(__dirname, '../src', 'estate'));
+let StartingPoint = require(path.join(__dirname, '../src', 'starting_point'));
 let Dice = require(path.join(__dirname, '../src', 'dice'));
 
 describe('RollCommand', ()=>{
@@ -98,6 +99,31 @@ describe('RollCommand', ()=>{
 
     afterEach(() => {
       player.currentPlace.should.equal(estate);
+    });
+  });
+
+  describe('#execute', ()=>{
+    beforeEach(() => {
+        dice = new Dice();
+        dice.roll = () => 1;
+        map = new GameMap();
+        player = new Player(map, 1000);
+        startingPoint = new StartingPoint(1);
+
+        map.move = () => startingPoint;
+        command = new RollCommand(dice);
+
+        player.status.should.equal('WAIT_FOR_COMMAND');
+    });
+
+    it('should move player to starting point and turn end', () => {
+      player.execute(command);
+
+      player.status.should.equal('TURN_END');
+    });
+
+    afterEach(() => {
+      player.currentPlace.should.equal(startingPoint);
     });
   });
 
