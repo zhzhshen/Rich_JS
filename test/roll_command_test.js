@@ -7,6 +7,8 @@ let RollCommand = require(path.join(__dirname, '../src', 'roll_command'));
 let GameMap = require(path.join(__dirname, '../src', 'game_map'));
 let Estate = require(path.join(__dirname, '../src', 'estate'));
 let StartingPoint = require(path.join(__dirname, '../src', 'starting_point'));
+let Hospital = require(path.join(__dirname, '../src', 'hospital'));
+let MagicHouse = require(path.join(__dirname, '../src', 'magic_house'));
 let Dice = require(path.join(__dirname, '../src', 'dice'));
 
 describe('RollCommand', ()=>{
@@ -108,23 +110,38 @@ describe('RollCommand', ()=>{
         dice.roll = () => 1;
         map = new GameMap();
         player = new Player(map, 1000);
-        startingPoint = new StartingPoint(1);
-
-        map.move = () => startingPoint;
-        command = new RollCommand(dice);
-
-        player.status.should.equal('WAIT_FOR_COMMAND');
     });
 
     it('should move player to starting point and turn end', () => {
+      startingPoint = new StartingPoint(1);
+      map.move = () => startingPoint;
+      command = new RollCommand(dice);
+
       player.execute(command);
 
       player.status.should.equal('TURN_END');
     });
 
-    afterEach(() => {
-      player.currentPlace.should.equal(startingPoint);
+    it('should move player to magic house and turn end', () => {
+      magicHouse = new MagicHouse(1);
+      map.move = () => magicHouse;
+      command = new RollCommand(dice);
+
+      player.execute(command);
+
+      player.status.should.equal('TURN_END');
     });
+
+    it('should move player to hospital and turn end', () => {
+      hospital = new Hospital(1);
+      map.move = () => hospital;
+      command = new RollCommand(dice);
+
+      player.execute(command);
+
+      player.status.should.equal('TURN_END');
+    });
+
   });
 
   describe('#respond to buy estate', ()=>{
