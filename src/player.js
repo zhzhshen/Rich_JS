@@ -1,6 +1,24 @@
 class Player {
-  constructor() {
+  constructor(map, money) {
+    this.map = map;
+    this.money = money;
     this.status = 'WAIT_FOR_COMMAND';
+  }
+
+  get map() {
+    return this._map;
+  }
+
+  set map(map) {
+    this._map = map;
+  }
+
+  get money() {
+    return this._money;
+  }
+
+  set money(money) {
+    this._money = money;
   }
 
   get status() {
@@ -11,12 +29,28 @@ class Player {
     this._status = value;
   }
 
+  get command() {
+    return this._command;
+  }
+
+  set command(command) {
+    this._command = command;
+  }
+
+  buy() {
+    if (this.money >= this.currentPlace.price) {
+      this.money = this.money - this.currentPlace.price;
+      this.currentPlace.sellTo(this);
+    } 
+  }
+
   execute(command) {
-    this.status = command.execute(this);
+    this.command = command
+    this.status = this.command.execute(this);
   }
 
   respond(response) {
-    this.status = command.respond(response)
+    this.status = this.command.respond(response)
   }
 }
 
