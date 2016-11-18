@@ -57,6 +57,9 @@ class Estate {
     if (this.owner == null) {
       return new BuyEstateCommand().execute(player);
     } else if (this.owner != player) {
+      if (this.owner.isInHospital() || this.owner.isInPrison() || player.hasEvisu()) {
+        return 'TURN_END';
+      }
       let charge = this.getCharge();
       if (player.money >= charge) {
         player.money -= charge;

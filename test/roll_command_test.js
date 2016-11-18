@@ -52,6 +52,42 @@ describe('RollCommand', ()=>{
       player.status.should.equal('TURN_END');
     });
 
+    it('should move player to others estate and not pay if owner in hospital', () => {
+      other = new Player(map, 1000)
+      other.burn();
+      estate.owner = other;
+
+      player.execute(command);
+
+      player.money.should.equal(1000);
+      other.money.should.equal(1000);
+      player.status.should.equal('TURN_END');
+    });
+
+    it('should move player to others estate and not pay if owner in prison', () => {
+      other = new Player(map, 1000)
+      other.prisoned();
+      estate.owner = other;
+
+      player.execute(command);
+
+      player.money.should.equal(1000);
+      other.money.should.equal(1000);
+      player.status.should.equal('TURN_END');
+    });
+
+    it('should move player to others estate and not pay if player has evisu', () => {
+      other = new Player(map, 1000)
+      estate.owner = other;
+      player.evisu();
+
+      player.execute(command);
+
+      player.money.should.equal(1000);
+      other.money.should.equal(1000);
+      player.status.should.equal('TURN_END');
+    });
+
     it('should move player to own estate and wait for response', () => {
       estate.owner = player;
 
