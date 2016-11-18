@@ -4,6 +4,28 @@ class Player {
     this.money = money;
     this.status = 'WAIT_FOR_COMMAND';
     this.specialStatus = {};
+    this.items = [];
+    this.point = 200;
+  }
+
+  get items() {
+    return this._items;
+  }
+
+  set items(items) {
+    this._items = items;
+  }
+
+  gainItem(item) {
+    this._items.push(item);
+  }
+
+  get point () {
+    return this._point;
+  }
+
+  set point(point) {
+    this._point = point;
   }
 
   get map() {
@@ -50,6 +72,22 @@ class Player {
     if (this.money >= this.currentPlace.price) {
       this.money -= this.currentPlace.price;
       this.currentPlace.sellTo(this);
+    }
+  }
+
+  buyItem(item) {
+    if (this.point >= item.point) {
+      this.point -= item.point;
+      this.gainItem(item);
+    }
+    return 'TURN_END';
+  }
+
+  hasPointForCheapest() {
+    if (this.point >= 30) {
+      return true;
+    } else {
+      return false;
     }
   }
 

@@ -9,6 +9,7 @@ let Estate = require(path.join(__dirname, '../src', 'estate'));
 let StartingPoint = require(path.join(__dirname, '../src', 'starting_point'));
 let Hospital = require(path.join(__dirname, '../src', 'hospital'));
 let MagicHouse = require(path.join(__dirname, '../src', 'magic_house'));
+let ToolHouse = require(path.join(__dirname, '../src', 'tool_house'));
 let Dice = require(path.join(__dirname, '../src', 'dice'));
 
 describe('RollCommand', ()=>{
@@ -142,6 +143,89 @@ describe('RollCommand', ()=>{
       player.status.should.equal('TURN_END');
     });
 
+  });
+
+  describe('#execute', ()=>{
+    beforeEach(() => {
+        dice = new Dice();
+        dice.roll = () => 1;
+        map = new GameMap();
+        player = new Player(map, 1000);
+
+        toolHouse = new ToolHouse(1);
+        map.move = () => toolHouse;
+        command = new RollCommand(dice);
+        player.execute(command);
+    });
+
+    it('should move player to tool house and wait for response', () => {
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player buy block when respond 1', () => {
+      player.respond(1);
+
+      player.items.length.should.equal(1);
+      player.point.should.equal(150);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player fail to buy block when respond 1 without enough point', () => {
+      player.point = 30;
+      player.respond(1);
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(30);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player buy robot when respond 2', () => {
+      player.respond(2);
+
+      player.items.length.should.equal(1);
+      player.point.should.equal(170);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player fail to buy robot and turn end when respond 2 without enough point', () => {
+      player.point = 20;
+      player.respond(2);
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(20);
+      player.status.should.equal('TURN_END');
+    });
+
+    it('should player buy robot when respond 3', () => {
+      player.respond(3);
+
+      player.items.length.should.equal(1);
+      player.point.should.equal(150);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+
+      player.respond(2);
+
+      player.items.length.should.equal(2);
+      player.point.should.equal(120);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player fail to buy robot and turn end when respond 2 without enough point', () => {
+      player.point = 30;
+      player.respond(3);
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(30);
+      player.status.should.equal('WAIT_FOR_RESPONSE');
+    });
+
+    it('should player fail to buy and turn end when respond anything other than 1,2,3', () => {
+      player.respond('y');
+
+      player.items.length.should.equal(0);
+      player.point.should.equal(200);
+      player.status.should.equal('TURN_END');
+    });
   });
 
   describe('#respond to buy estate', ()=>{
